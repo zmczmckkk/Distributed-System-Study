@@ -1,5 +1,4 @@
-ZooKeeper解决了哪些问题
-========================  
+#ZooKeeper解决了哪些问题
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/zmczmckkk/Distributed-System-Study/pulls)
@@ -17,7 +16,7 @@ ZooKeeper解决了哪些问题
   
 　　分布式系统的运行是很复杂的，因为涉及到了网络通信还有节点失效等不可控的情况。下面介绍在最传统的master-workers模型，主要可以会遇到什么问题，传统方法是怎么解决以及怎么用zookeeper解决。
 
-### Master节点管理
+## Master节点管理
 　　集群当中最重要的是Master，所以一般都会设置一台Master的Backup。  
 　　Backup会定期向Master获取Meta信息并且检测Master的存活性，一旦Master挂了，Backup立马启动，接替Master的工作自己成为Master，分布式的情况多种多样，因为涉及到了网络通信的抖动，针对下面的情况:
 * Backup检测Master存活性传统的就是定期发包，一旦一定时间段内没有收到响应就判定Master Down了，于是Backup就启动，如果Master其实是没有down，Backup收不到响应或者收到响应延迟的原因是因为网络阻塞
@@ -29,13 +28,13 @@ Backup是定期同步Master中的meta信息，所以总是滞后的，一旦Mast
     1. Master节点高可用，并且保证唯一
     2. Meta信息的及时同步
 ```
-### 配置文件管理
+## 配置文件管理
 　　集群中配置文件的更新和同步是很频繁的，传统的配置文件分发都是需要把配置文件数据分发到每台worker上，然后进行worker的reload，这种方式是最笨的方式，结构很难维护，因为如果集群当中有可能很多种应用的配置文件要同步，而且效率很低，集群规模一大负载很高。还有一种就是每次更新把配置文件单独保存到一个数据库里面，然后worker端定期pull数据，这种方式就是数据及时性得不到同步。
 ```
     解决问题:   
     1. 统一配置文件分发并且及时让worker生效
 ```
-### 分布式锁
+## 分布式锁
 　　在一台机器上要多个进程或者多个线程操作同一资源比较简单，因为可以有大量的状态信息或者日志信息提供保证，比如两个A和B进程同时写一个文件，加锁就可以实现。但是分布式系统怎么办？需要一个三方的分配锁的机制，几百台worker都对同一个网络中的文件写操作，怎么协同？还有怎么保证高效的运行？
 * zookeeper分布式锁
 
@@ -44,7 +43,7 @@ Backup是定期同步Master中的meta信息，所以总是滞后的，一旦Mast
     解决问题:   
     1. 高效分布式的分布式锁
 ```
-### 集群worker管理
+## 集群worker管理
 　　集群中的worker挂了是很可能的，一旦workerA挂了，如果存在其余的workers互相之间需要通信，那么workers必须尽快更新自己的hosts列表，把挂了的worker剔除，从而不在和它通信，而Master要做的是把挂了worker上的作业调度到其他的worker上。同样的，这台worker重新恢复正常了，要通知其他的workers更新hosts列表。传统的作法都是有专门的监控系统，通过不断去发心跳包(比如ping)来发现worker是否alive，缺陷就是及时性问题，不能应用于在线率要求较高的场景
 zookeeper监控集群
 
