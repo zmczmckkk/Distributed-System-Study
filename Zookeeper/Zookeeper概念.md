@@ -29,8 +29,8 @@
 * `ZooKeeper` 一个最常用的使用场景就是用于担任`服务生产者`和`服务消费者`的`注册中心`。
 * `服务生产者`将自己提供的服务注册到 ZooKeeper 中心，`服务的消费者`在进行服务调用的时候先到`ZooKeeper`中查找服务，获取到`服务生产者`的详细信息之后，再去调用`服务生产者`的内容与数据。
 　　  
-　　如下图所示，在 Dubbo 架构中 ZooKeeper 就担任了注册中心这一角色。
-![](Distributed-System-Study/Zookeeper/resource/img/zookeeper_characoter.jpg)
+　　如下图所示，在 Dubbo 架构中 ZooKeeper 就担任了注册中心这一角色。  
+![角色](Zookeeper/resource/img/zookeeper_characoter.jpg)
 ## Master节点管理
 　　集群当中最重要的是Master，所以一般都会设置一台Master的Backup。  
 　　Backup会定期向Master获取Meta信息并且检测Master的存活性，一旦Master挂了，Backup立马启动，接替Master的工作自己成为Master，分布式的情况多种多样，因为涉及到了网络通信的抖动，针对下面的情况:
